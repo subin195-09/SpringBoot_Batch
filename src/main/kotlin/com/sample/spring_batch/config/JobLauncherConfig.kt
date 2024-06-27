@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled
 class JobLauncherConfig(
   private val customJobLauncher: CustomJobLauncher
 ) : Logging {
-  @Scheduled(cron = "0 */30 * * * *")
+  @Scheduled(cron = "0 */1 * * * *")
   fun jobScheduler() {
     customJobLauncher.launchNextJob()
   }

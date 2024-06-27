@@ -25,6 +25,7 @@ class DatabaseConfig(
 ) {
   // DataSource configuration
   @Bean
+  @Primary
   fun postgresqlDataSource(): DataSource {
     val hikariConfig = HikariConfig().apply {
       jdbcUrl = env.getRequiredProperty("spring.datasource.url")
@@ -44,7 +45,6 @@ class DatabaseConfig(
 
   // EntityManagerFactory
   @Bean
-  @Primary
   fun postgresqlEntityManagerFactory(
     builder: EntityManagerFactoryBuilder,
     @Qualifier("postgresqlDataSource") dataSource: DataSource
@@ -61,14 +61,14 @@ class DatabaseConfig(
   }
 
   @Bean
-  @Primary
-  fun jpaTransactionManager(
+  fun postgresqlTransactionManager(
     @Qualifier("postgresqlEntityManagerFactory") entityManagerFactory: LocalContainerEntityManagerFactoryBean
   ): PlatformTransactionManager {
     return JpaTransactionManager(entityManagerFactory.`object`!!)
   }
 
   @Bean
+  @Primary
   fun batchTransactionManager(
     @Qualifier("postgresqlDataSource") dataSource: DataSource
   ): PlatformTransactionManager {

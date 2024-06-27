@@ -4,6 +4,7 @@ import com.sample.spring_batch.common.CommonConstant.Companion.BATCH_SIZE
 import com.sample.spring_batch.common.CommonConstant.Companion.SKIP_LIMIT
 import com.sample.spring_batch.config.Logging
 import com.sample.spring_batch.entity.Keyword
+import com.sample.spring_batch.listener.JobCompletionNotificationListener
 import jakarta.persistence.EntityManagerFactory
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
@@ -21,29 +22,31 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
 import java.time.Instant
-import kotlin.math.log
 
 @Configuration
-@EnableBatchProcessing(dataSourceRef = "postgresqlDataSource", transactionManagerRef = "batchTransactionManager")
-class ChangeKeywordName() : Logging {
+@EnableBatchProcessing(dataSourceRef = "postgresqlDataSource", transactionManagerRef = "postgresqlTransactionManager")
+class ChangeKeywordName(
+  private val jobCompletionNotificationListener: JobCompletionNotificationListener
+) : Logging {
 
   @Bean
   fun changeKeywordNameJob(
     jobRepository: JobRepository,
-    @Qualifier("batchTransactionManager") transactionManager: PlatformTransactionManager,
+    @Qualifier("postgresqlTransactionManager") transactionManager: PlatformTransactionManager,
     reader: JpaPagingItemReader<Keyword>,
     processor: ItemProcessor<Keyword, Keyword>,
     writer: JpaItemWriter<Keyword>
   ): Job {
     return JobBuilder("changeKeywordNameJob", jobRepository)
       .start(changeKeywordNameStep(jobRepository, transactionManager, reader, processor, writer))
+      .listener(jobCompletionNotificationListener)
       .build()
   }
 
   @Bean
   fun changeKeywordNameStep(
     jobRepository: JobRepository,
-    @Qualifier("batchTransactionManager") transactionManager: PlatformTransactionManager,
+    @Qualifier("postgresqlTransactionManager") transactionManager: PlatformTransactionManager,
     reader: JpaPagingItemReader<Keyword>,
     processor: ItemProcessor<Keyword, Keyword>,
     writer: JpaItemWriter<Keyword>

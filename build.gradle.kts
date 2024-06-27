@@ -18,6 +18,16 @@ hibernate {
 	}
 }
 
+// allOpen 설정: 특정 애노테이션이 붙은 클래스를 컴파일 타임에 open 클래스로 만듦. 이는 JPA를 사용할 때 프록시 객체 생성을 위해 필요함
+allOpen {
+	// JPA 엔티티 클래스에 대해 open 클래스로 만들도록 설정
+	annotation("jakarta.persistence.Entity")
+	// JPA 상속 계층에서 사용되는 클래스에 대해 open 클래스로 만들도록 설정
+	annotation("jakarta.persistence.MappedSuperclass")
+	// JPA 내장 타입에 대해 open 클래스로 만들도록 설정
+	annotation("jakarta.persistence.Embeddable")
+}
+
 
 group = "com.sample"
 version = "0.0.1-SNAPSHOT"

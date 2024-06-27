@@ -15,6 +15,6 @@ class Keyword : BaseEntity() {
   val id: UUID = UUID.randomUUID()
 
   // 이름
-  @Column(name = "email", columnDefinition = "VARCHAR(255)", nullable = true)
+  @Column(name = "name", columnDefinition = "VARCHAR(255)", nullable = true)
   var name: String? = null
 }

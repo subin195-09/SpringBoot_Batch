@@ -19,20 +19,24 @@ class CustomJobLauncher(
     // job 추가
   )
 
-  fun launchNextJob() {
-    jobList.forEach { jobName ->
-      val job = applicationContext.getBean(jobName, Job::class.java)
-      val jobParameters = JobParametersBuilder()
-        .addLong("time", System.currentTimeMillis())
-        .toJobParameters()
+  private var currentJobIndex = 0
 
-      val lastJobExecution = jobRepository.getLastJobExecution(jobName, jobParameters)
-      if (lastJobExecution !== null && lastJobExecution.isRunning) {
-        logger.error("$jobName 이미 실행중입니다")
-      } else {
-        jobLauncher.run(job, jobParameters)
-      }
-      logger.info("모든 job이 완료되었습니다")
+  fun launchNextJob() {
+    if (currentJobIndex >= jobList.size) {
+      logger.info("Job이 완료되었습니다.")
+      return
+    }
+
+    val jobName = jobList[currentJobIndex++]
+    val job = applicationContext.getBean(jobName, Job::class.java)
+    val jobParameters = JobParametersBuilder()
+      .addLong("time", System.currentTimeMillis())
+      .toJobParameters()
+
+    jobRepository.getLastJobExecution(jobName, jobParameters)?.let {
+      logger.error("$jobName 이미 실행중입니다")
+    } ?: run {
+      jobLauncher.run(job, jobParameters)
     }
   }
 
