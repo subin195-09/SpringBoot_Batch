@@ -24,6 +24,7 @@ class CustomJobLauncher(
   fun launchNextJob() {
     if (currentJobIndex >= jobList.size) {
       logger.info("Job이 완료되었습니다.")
+      currentJobIndex = 0
       return
     }
 

@@ -59,6 +59,7 @@ class ChangeKeywordName(
       .faultTolerant()
       .skip(Exception::class.java)
       .skipLimit(SKIP_LIMIT)
+      .transactionManager(transactionManager)
       .build()
 
   }
