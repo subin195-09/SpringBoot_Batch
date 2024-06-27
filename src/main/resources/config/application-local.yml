@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    # 데이터베이스 접속 URL을 정의합니다.
+    url: jdbc:postgresql://localhost:5432/test_db
+    # 데이터베이스 사용자 이름을 정의합니다.
+    username: test_user
+    # 데이터베이스 비밀번호를 정의합니다.
+    password: test_password
+    # 데이터베이스 드라이버 클래스 이름을 정의합니다.
+    driverClassName: org.postgresql.Driver
+  jpa:
+    hibernate:
+      # Hibernate DDL 자동 실행 전략을 설정합니다.
+      ddl-auto: none
+    properties:
+      hibernate:
+        # SQL 명령어 출력을 비활성화합니다.
+        show_sql: true
+        # SQL 명령어 포맷팅을 활성화하여 가독성을 높입니다.
+        format_sql: true
+global:
+  # 애플리케이션의 현재 환경 상태를 나타냅니다. 개발 중에는 'local'로 설정될 수 있습니다.
+  env-state: local
+server:
+  # 애플리케이션 서버가 리스닝할 포트 번호를 정의합니다.
+  port: 8001

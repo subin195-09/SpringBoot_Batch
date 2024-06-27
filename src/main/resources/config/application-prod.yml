@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    # 데이터베이스 연결 정보
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driverClassName: org.postgresql.Driver
+    hikari:
+      # HikariCP 커넥션 풀 설정
+      maximumPoolSize: 5  # 커넥션 풀의 최대 크기
+      minimumIdle: 1 # 최소 유휴 커넥션 수
+      idleTimeout: 600000  # 유휴 상태의 커넥션이 풀에서 제거되기까지의 시간(ms)
+      connectionTimeout: 20000  # 커넥션 타임아웃 시간(ms)
+  jpa:
+    hibernate:
+      ddl-auto: none  # Hibernate가 데이터베이스 스키마를 자동으로 생성하거나 변경하지 않도록 설정
+    properties:
+      hibernate:
+        show_sql: false  # SQL 문 출력 비활성화
+        format_sql: false  # SQL 문 포맷팅 비활성화
+global:
+  env-state: ${ENV_STATE}  # 애플리케이션의 실행 환경(예: local, dev, prod).
+server:
+  port: ${API_SERVER_PORT}  # 서버가 리스닝할 포트 번호.

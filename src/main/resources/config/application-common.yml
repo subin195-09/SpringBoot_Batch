@@ -1,0 +1,14 @@
+spring:
+  messages:
+    encoding: UTF-8  # 메시지 인코딩 설정. 여기서는 UTF-8을 사용합니다.
+  jpa:
+    properties:
+      jakarta.persistence.validation.mode: auto  # JPA 유효성 검사 모드를 자동으로 설정합니다.
+      hibernate:
+        batch_size: 100  # Hibernate 배치 처리 시 한 번에 처리할 엔티티 수를 설정합니다.
+        jdbc:
+          batch_size: 100  # JDBC 배치 처리 시 한 번에 처리할 명령의 수를 설정합니다.
+        order_inserts: true  # 삽입 연산의 순서 최적화를 활성화합니다.
+        order_updates: true  # 업데이트 연산의 순서 최적화를 활성화합니다.
+        dialect: org.hibernate.dialect.PostgreSQLDialect  # 사용할 SQL Dialect를 PostgreSQL로 설정합니다.
+global:
