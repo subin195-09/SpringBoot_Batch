@@ -18,6 +18,23 @@ spring:
         show_sql: true
         # SQL 명령어 포맷팅을 활성화하여 가독성을 높입니다.
         format_sql: true
+
+# SQL 문 로깅
+logging:
+  level:
+    org:
+      hibernate:
+        orm:
+          jdbc:
+            bind: trace
+      springframework:
+        web:
+          reactive:
+            function:
+              client: debug
+      org.springframework.web.reactive.function.client: debug
+      reactor.netty.http.client: debug
+
 global:
   # 애플리케이션의 현재 환경 상태를 나타냅니다. 개발 중에는 'local'로 설정될 수 있습니다.
   env-state: local

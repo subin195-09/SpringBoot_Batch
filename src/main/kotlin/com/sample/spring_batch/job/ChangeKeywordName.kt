@@ -13,10 +13,10 @@ import org.springframework.batch.core.job.builder.JobBuilder
 import org.springframework.batch.core.repository.JobRepository
 import org.springframework.batch.core.step.builder.StepBuilder
 import org.springframework.batch.item.ItemProcessor
+import org.springframework.batch.item.database.JpaCursorItemReader
 import org.springframework.batch.item.database.JpaItemWriter
-import org.springframework.batch.item.database.JpaPagingItemReader
+import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder
-import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -33,7 +33,7 @@ class ChangeKeywordName(
   fun changeKeywordNameJob(
     jobRepository: JobRepository,
     @Qualifier("postgresqlTransactionManager") transactionManager: PlatformTransactionManager,
-    reader: JpaPagingItemReader<Keyword>,
+    reader: JpaCursorItemReader<Keyword>,
     processor: ItemProcessor<Keyword, Keyword>,
     writer: JpaItemWriter<Keyword>
   ): Job {
@@ -47,7 +47,7 @@ class ChangeKeywordName(
   fun changeKeywordNameStep(
     jobRepository: JobRepository,
     @Qualifier("postgresqlTransactionManager") transactionManager: PlatformTransactionManager,
-    reader: JpaPagingItemReader<Keyword>,
+    reader: JpaCursorItemReader<Keyword>,
     processor: ItemProcessor<Keyword, Keyword>,
     writer: JpaItemWriter<Keyword>
   ): Step {
@@ -67,17 +67,16 @@ class ChangeKeywordName(
   @Bean
   fun changeKeywordNameReader(
     @Qualifier("postgresqlEntityManagerFactory") entityManagerFactory: EntityManagerFactory
-  ): JpaPagingItemReader<Keyword> {
+  ): JpaCursorItemReader<Keyword> {
     val jpqlQuery = """
       SELECT k FROM Keyword k
       WHERE k.name IS NULL
     """.trimIndent()
 
-    return JpaPagingItemReaderBuilder<Keyword>()
+    return JpaCursorItemReaderBuilder<Keyword>()
       .name("changeKeywordNameReader")
       .entityManagerFactory(entityManagerFactory)
       .queryString(jpqlQuery)
-      .pageSize(BATCH_SIZE)
       .build()
   }
 

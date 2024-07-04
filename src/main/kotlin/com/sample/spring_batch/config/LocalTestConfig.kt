@@ -16,8 +16,10 @@ class LocalTestConfig(
   @Bean
   fun dataSourceInitializer(): CommandLineRunner {
     return CommandLineRunner {
+      for (i in 0 until 10) {
+        keywordRepository.save(Keyword())
+      }
       // name 이 null 인 데이터 추가
-      keywordRepository.save(Keyword())
     }
   }
 }
